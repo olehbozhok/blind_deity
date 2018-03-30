@@ -1,9 +1,16 @@
 package components
 
 type Inhabitant struct {
-	height int
-	weight int
-	limbs  Limbs
+	reproduction Reproduction
+	moves        int
+	height       int
+	weight       int
+	limbs        Limbs
+}
+
+type Reproduction struct {
+	change    int
+	frequency int
 }
 
 type Limbs struct {
