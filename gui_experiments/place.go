@@ -15,7 +15,7 @@ func (p *Place) GetPosition() (int, int) {
 }
 
 // PopCreature delete creature from this field and return it
-func (p *Place) getCreature() *Inhabitant {
+func (p *Place) GetCreature() *Inhabitant {
 	return p.creature
 
 }

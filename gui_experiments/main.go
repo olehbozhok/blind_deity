@@ -1,11 +1,8 @@
 package main
 
 import (
-	"image"
-	"os"
-
-	"image/color"
-	"image/png"
+	"math/rand"
+	"time"
 
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
@@ -20,22 +17,13 @@ const (
 	numCircles = 4
 )
 
-// func loadPicture(path string) (pixel.Picture, error) {
-// 	file, err := os.Open(path)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	defer file.Close()
-// 	img, _, err := image.Decode(file)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	return pixel.PictureDataFromImage(img), nil
-// }
+func init() {
+	rand.Seed(time.Now().Unix())
+}
 
 func run() {
 	cfg := pixelgl.WindowConfig{
-		Title:  "Pixel Rocks!",
+		Title:  "Blind Deily",
 		Bounds: pixel.R(0, 0, float64(width), float64(height)),
 		VSync:  true,
 	}
@@ -47,41 +35,17 @@ func run() {
 
 	//  pixel.IM standart matrix
 	IMCenter := pixel.IM.Moved(win.Bounds().Center())
-	fieldSize := 50
+	fieldSize := 10
 
-	fieldsImg := GenerateGameField(width, height, fieldSize)
-	fieldPic := pixel.PictureDataFromImage(fieldsImg)
-	fieldSprite := pixel.NewSprite(fieldPic, win.Bounds())
-
-	pRect := win.Bounds()
-	dest := image.NewRGBA(image.Rect(0, 0, width, height))
-	// Drawcircle(dest, 50, 50, 50, colornames.Whitesmoke)
-	for x := fieldSize / 2; x <= int(pRect.Max.X); x += fieldSize {
-		Drawcircle(dest, x, fieldSize/2, fieldSize/2, colornames.Whitesmoke)
-	}
-
-	picData := pixel.PictureDataFromImage(dest)
-	sprite2 := pixel.NewSprite(picData, win.Bounds())
-	_ = sprite2
-	// sprite2.Draw(win, IMCenter)
-	for i := float64(0); i < 50; i++ {
-		// sprite2.Draw(win, IMCenter.Moved(pixel.V(i, i)))
-	}
-
-	fieldSprite.Draw(win, IMCenter)
-
-	sprite2.Draw(win, IMCenter)
+	gr := NewGround(width, height, fieldSize, 100)
+	gr.Draw(win, IMCenter)
 
 	// win.Clear(colornames.Forestgreen)
 	for !win.Closed() {
 		win.Update()
+		gr.Draw(win, IMCenter)
 		if win.JustPressed(pixelgl.KeyQ) {
 			return
-		}
-		if win.JustPressed(pixelgl.KeyS) {
-			w, _ := os.Create("blogmap.png")
-			png.Encode(w, dest) //Encode writes the Image m to w in PNG format.
-			w.Close()
 		}
 	}
 }
@@ -89,4 +53,3 @@ func run() {
 func main() {
 	pixelgl.Run(run)
 }
-

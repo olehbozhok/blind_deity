@@ -17,3 +17,7 @@ func NewScene(width, height, pxField, numCreatures int) *Scene {
 func (s *Scene) Draw(t pixel.Target, matrix pixel.Matrix) {
 	s.ground.Draw(t, matrix)
 }
+
+func (s *Scene) Update() {
+	//TODO: handle change
+}
