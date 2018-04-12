@@ -17,3 +17,8 @@ type Limbs struct {
 	count  int
 	length int
 }
+
+func NewInhabitant() *Inhabitant {
+	i := Inhabitant{}
+	return &i
+}
