@@ -15,10 +15,9 @@ type GroundGui struct {
 }
 
 func NewGround(hPx, wPx, pxField int) *GroundGui {
-	hLen := hPx / pxField
-	wLen := wPx / pxField
+	hLen := hPx/pxField - 1
+	wLen := wPx/pxField - 1
 
-	// create Sprite
 	fieldsImg := utils.GenerateGameField(wPx, hPx, pxField)
 	fieldPic := pixel.PictureDataFromImage(fieldsImg)
 	fieldSprite := pixel.NewSprite(fieldPic, pixel.R(0, 0, float64(wPx), float64(hPx)))
@@ -36,7 +35,6 @@ func NewGround(hPx, wPx, pxField int) *GroundGui {
 
 func (g *GroundGui) Draw(t pixel.Target, matrix pixel.Matrix) {
 	g.sprite.Draw(t, matrix)
-	// TODO: Draw creatures
 	h, w := g.GetLimits()
 	for vh := 0; vh <= h; vh++ {
 		for vw := 0; vw <= w; vw++ {
@@ -50,6 +48,3 @@ func (g *GroundGui) Draw(t pixel.Target, matrix pixel.Matrix) {
 		}
 	}
 }
-
-
-

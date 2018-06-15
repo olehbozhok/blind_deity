@@ -39,24 +39,41 @@ func run() {
 	//  pixel.IM standart matrix
 	IMCenter := pixel.IM.Moved(win.Bounds().Center())
 	fieldSize := 10
-	fieldSize = 20
-	countCreatures := 5
+	fieldSize = 10
+	countCreatures := 50
 
 	gr := basegui.NewGround(width, height, fieldSize)
 	maxh, maxw := gr.GetLimits()
 	for i := 0; i < countCreatures; i++ {
 		randH := rand.Intn(maxh)
 		randW := rand.Intn(maxw)
+		// randH := maxh
+		// randW := maxw
 
 		cre := cr.NewBaseInhabitant(1, fieldSize)
 		gr.SetCreatureOn(randH, randW, cre)
-
+		// maxw--
 	}
+
+	cre := cr.NewBaseInhabitant(1, fieldSize)
+	gr.SetCreatureOn(0, 0, cre)
+	cre = cr.NewBaseInhabitant(1, fieldSize)
+	gr.SetCreatureOn(maxh, maxw, cre)
+	cre = cr.NewBaseInhabitant(1, fieldSize)
+	gr.SetCreatureOn(maxh-1, maxw, cre)
+	cre = cr.NewBaseInhabitant(1, fieldSize)
+	gr.SetCreatureOn(maxh, maxw, cre)
 
 	gr.Draw(win, IMCenter)
 
 	// win.Clear(colornames.Forestgreen)
-	ticker := time.NewTicker(500 * time.Millisecond)
+	ticker := time.NewTicker(250 * time.Millisecond)
+	go func() {
+		evSecond := time.NewTicker(500 * time.Millisecond)
+		for range evSecond.C {
+			gr.HandleNextStep()
+		}
+	}()
 
 	for !win.Closed() {
 		win.Update()
@@ -68,11 +85,8 @@ func run() {
 		select {
 		case <-ticker.C:
 			win.Clear(colornames.Black)
-			gr.HandleNextStep()
 			gr.Draw(win, IMCenter)
-
 		default:
-
 		}
 	}
 }
