@@ -50,3 +50,6 @@ func (g *GroundGui) Draw(t pixel.Target, matrix pixel.Matrix) {
 		}
 	}
 }
+
+
+

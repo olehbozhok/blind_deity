@@ -67,7 +67,10 @@ func run() {
 
 		select {
 		case <-ticker.C:
+			win.Clear(colornames.Black)
+			gr.HandleNextStep()
 			gr.Draw(win, IMCenter)
+
 		default:
 
 		}
