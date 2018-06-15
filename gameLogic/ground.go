@@ -64,6 +64,10 @@ func (g *Ground) HandleNextStep() {
 		for vw := 0; vw <= maxW; vw++ {
 			cr := g.places[vh][vw]
 			if cr != nil {
+				if cr.IsGoneAway() {
+					g.places[vh][vw] = nil
+					continue
+				}
 				toX, toY := cr.NextStep()
 				toH := vh + toY
 				toW := vw + toX
@@ -76,6 +80,19 @@ func (g *Ground) HandleNextStep() {
 
 				g.places[vh][vw] = nil
 				g.places[toH][toW] = cr
+
+				isBeget, m, child := cr.IsBeget()
+				if !isBeget {
+					continue
+				} else {
+					toH = vh + m.H
+					toW = vw + m.W
+					if toH < 0 || toW < 0 || toH > maxH || toW > maxW || g.places[toH][toW] != nil {
+						continue
+					}
+					g.places[toH][toW] = child
+				}
+
 			}
 
 		}

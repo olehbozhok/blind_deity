@@ -11,16 +11,33 @@ import (
 
 // BaseInhabitant represent base Inhabitant type
 type BaseInhabitant struct {
-	maxMove int
+	maxMove      int
+	percentBeget int
+	percentDie   int
 
 	pxPerson int
 	sprite   *pixel.Sprite
 	bulk     bool
 }
 
+// NewBaseInhabitantConf config to NewBaseInhabitant
+type NewBaseInhabitantConf struct {
+	MaxMove      int
+	PercentBeget int
+	PercentDie   int
+
+	PxPerson int
+}
+
 // NewBaseInhabitant used to create *BaseInhabitant
-func NewBaseInhabitant(maxMove, pxPerson int) *BaseInhabitant {
-	return &BaseInhabitant{maxMove: maxMove, pxPerson: pxPerson, bulk: true}
+func NewBaseInhabitant(c NewBaseInhabitantConf) *BaseInhabitant {
+	return &BaseInhabitant{
+		maxMove:      c.MaxMove,
+		pxPerson:     c.PxPerson,
+		percentBeget: c.PercentBeget,
+		percentDie:   c.PercentDie,
+		bulk:         true,
+	}
 }
 
 // NextStep return relative next position where Inhabitant want to be
@@ -45,7 +62,7 @@ func (i *BaseInhabitant) Bulk() {
 	i.bulk = true
 }
 
-// Getpix show how many pixels take cell
+// GetPix show how many pixels take cell
 func (i *BaseInhabitant) GetPix() int {
 	return i.pxPerson
 }
@@ -56,8 +73,38 @@ func (i *BaseInhabitant) Draw(t pixel.Target, matrix pixel.Matrix) {
 		i.bulk = false
 		img := i.GenImage()
 		indPic := pixel.PictureDataFromImage(img)
-		// maxVec := indPic.Bounds().Max
 		i.sprite = pixel.NewSprite(indPic, indPic.Bounds())
 	}
 	i.sprite.Draw(t, matrix)
+}
+
+// IsBeget when Inhabitant is beget return true, where and inhabit
+func (i *BaseInhabitant) IsBeget() (bool, utils.MoveVect, InhabitInterface) {
+	if rand.Intn(100) <= i.percentBeget {
+
+		mV := utils.MoveVect{}
+		if rand.Intn(1) == 0 {
+			mV.H = -1
+		} else {
+			mV.H = 1
+		}
+		if rand.Intn(1) == 0 {
+			mV.W = -1
+		} else {
+			mV.W = 1
+		}
+
+		return true, mV, NewBaseInhabitant(NewBaseInhabitantConf{
+			MaxMove:      i.maxMove,
+			PxPerson:     i.pxPerson,
+			PercentBeget: i.percentBeget,
+			PercentDie:   i.percentDie,
+		})
+	}
+	return false, utils.MoveVect{}, nil
+}
+
+// IsGoneAway true if Inhabitant is die
+func (i *BaseInhabitant) IsGoneAway() bool {
+	return rand.Intn(100) <= i.percentDie
 }
