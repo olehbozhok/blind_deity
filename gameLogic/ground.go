@@ -4,39 +4,43 @@ import (
 	cr "github.com/Oleg-MBO/blind_deity/creatures"
 )
 
+// Ground represent ground of game with all fields
 type Ground struct {
 	maxH, maxW int
-	places     []cr.InhabitInterface
+	places     [][]cr.InhabitInterface
 }
 
+// NewGround create Ground
 func NewGround(maxH, maxW int) *Ground {
 	g := new(Ground)
 
 	g.maxH = maxH
 	g.maxW = maxW
 
-	places := make([]cr.InhabitInterface, maxH*maxW+maxW+1, maxH*maxW+maxW+1)
-	g.places = places
-
+	placesHArr := make([][]cr.InhabitInterface, maxH+1, maxH+1)
+	for i := range placesHArr {
+		placesHArr[i] = make([]cr.InhabitInterface, maxW+1, maxW+1)
+	}
+	g.places = placesHArr
 	return g
 }
 
+// GetLimits return max height and wigth of fields
 func (g *Ground) GetLimits() (h, w int) {
 	return g.maxH, g.maxW
 }
 
+// IsInhabitExistOn return true if Inhabitexist on this field
 func (g *Ground) IsInhabitExistOn(h, w int) bool {
-	return g.places[h*w+w] != nil
+	return g.places[h][w] != nil
 }
 
-func (g *Ground) IsCreatureOn(h, w int) cr.InhabitInterface {
-	return g.places[h*w+w]
-}
-
+// GetCreatureOn return Inhabit on h, w field or nil
 func (g *Ground) GetCreatureOn(h, w int) cr.InhabitInterface {
-	return g.places[h*w+w]
+	return g.places[h][w]
 }
 
+// SetCreatureOn put creature on h,w
 func (g *Ground) SetCreatureOn(h, w int, inh cr.InhabitInterface) {
-	g.places[h*w+w] = inh
+	g.places[h][w] = inh
 }

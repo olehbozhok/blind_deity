@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"math/rand"
 	"time"
 
@@ -41,16 +40,14 @@ func run() {
 	IMCenter := pixel.IM.Moved(win.Bounds().Center())
 	fieldSize := 10
 	fieldSize = 20
-	countCreatures := 1
+	countCreatures := 5
 
 	gr := basegui.NewGround(width, height, fieldSize)
-	// maxh, maxw := gr.GetLimits()
+	maxh, maxw := gr.GetLimits()
 	for i := 0; i < countCreatures; i++ {
-		// randH := rand.Intn(maxh)
-		// randW := rand.Intn(maxw)
-		fmt.Println("in loop")
-		randH := 1
-		randW := 1
+		randH := rand.Intn(maxh)
+		randW := rand.Intn(maxw)
+
 		cre := cr.NewBaseInhabitant(1, fieldSize)
 		gr.SetCreatureOn(randH, randW, cre)
 
@@ -70,8 +67,7 @@ func run() {
 
 		select {
 		case <-ticker.C:
-			// fmt.Println("Draw")
-			// gr.Draw(win, IMCenter)
+			gr.Draw(win, IMCenter)
 		default:
 
 		}

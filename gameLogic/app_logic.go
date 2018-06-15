@@ -1,7 +1,7 @@
 package gamelogic
 
-type Game struct {
-	// gr
-}
+// type Game struct {
+// 	// gr
+// }
 
 // Inhabitant
