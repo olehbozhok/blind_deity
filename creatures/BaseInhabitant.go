@@ -25,7 +25,7 @@ func NewBaseInhabitant(maxMove, pxPerson int) *BaseInhabitant {
 
 // NextStep return relative next position where Inhabitant want to be
 func (i *BaseInhabitant) NextStep() (x, y int) {
-	return rand.Intn(i.maxMove*2) - i.maxMove, rand.Intn(i.maxMove*2) - i.maxMove
+	return rand.Intn(i.maxMove+i.maxMove+1) - i.maxMove, rand.Intn(i.maxMove+i.maxMove+1) - i.maxMove
 }
 
 // GenImage generate image of the Inhabitant
