@@ -11,6 +11,9 @@ type InhabitInterface interface {
 	IsBeget() (bool, utils.MoveVect, InhabitInterface)
 	IsGoneAway() bool
 
+	Force() int
+	GotHit(from InhabitInterface)
+
 	GetPix() int
 	Draw(t pixel.Target, matrix pixel.Matrix)
 }

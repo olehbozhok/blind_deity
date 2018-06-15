@@ -40,6 +40,15 @@ func (g *Ground) IsInhabitExistOn(h, w int) bool {
 	return g.places[h][w] != nil
 }
 
+// getCreatureOn hidden (without rwmutex.RLock())
+func (g *Ground) getCreatureOn(h, w int) cr.InhabitInterface {
+	maxH, maxW := g.GetLimits()
+	if h < 0 || w < 0 || h > maxH || w > maxW {
+		return nil
+	}
+	return g.places[h][w]
+}
+
 // GetCreatureOn return Inhabit on h, w field or nil
 func (g *Ground) GetCreatureOn(h, w int) cr.InhabitInterface {
 	g.rwmutex.RLock()
@@ -68,6 +77,20 @@ func (g *Ground) HandleNextStep() {
 					g.places[vh][vw] = nil
 					continue
 				}
+
+				if cr1 := g.getCreatureOn(vh+1, vw+1); cr1 != nil {
+					cr1.GotHit(cr)
+				}
+				if cr1 := g.getCreatureOn(vh-1, vw+1); cr1 != nil {
+					cr1.GotHit(cr)
+				}
+				if cr1 := g.getCreatureOn(vh+1, vw-1); cr1 != nil {
+					cr1.GotHit(cr)
+				}
+				if cr1 := g.getCreatureOn(vh-1, vw-1); cr1 != nil {
+					cr1.GotHit(cr)
+				}
+
 				toX, toY := cr.NextStep()
 				toH := vh + toY
 				toW := vw + toX
@@ -82,15 +105,12 @@ func (g *Ground) HandleNextStep() {
 				g.places[toH][toW] = cr
 
 				isBeget, m, child := cr.IsBeget()
-				if !isBeget {
-					continue
-				} else {
+				if isBeget {
 					toH = vh + m.H
 					toW = vw + m.W
-					if toH < 0 || toW < 0 || toH > maxH || toW > maxW || g.places[toH][toW] != nil {
-						continue
+					if !(toH < 0 || toW < 0 || toH > maxH || toW > maxW || g.places[toH][toW] != nil) {
+						g.places[toH][toW] = child
 					}
-					g.places[toH][toW] = child
 				}
 
 			}

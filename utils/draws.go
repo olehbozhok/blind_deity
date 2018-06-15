@@ -27,6 +27,7 @@ func GenerateGameField(width, height, fieldSize int) *image.RGBA {
 	return m
 }
 
+// OilyPoint draw oily point
 func OilyPoint(image *image.RGBA, x, y int, col color.Color) {
 	image.Set(x, y, col)
 	image.Set(x-1, y, col)
@@ -35,6 +36,7 @@ func OilyPoint(image *image.RGBA, x, y int, col color.Color) {
 	image.Set(x, y-1, col)
 }
 
+// Drawcircle is drawing circle
 func Drawcircle(image *image.RGBA, x0, y0, radius int, col color.Color) {
 	var x, y, dx, dy, derr int
 	x = radius - 1

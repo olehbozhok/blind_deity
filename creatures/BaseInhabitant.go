@@ -11,6 +11,8 @@ import (
 
 // BaseInhabitant represent base Inhabitant type
 type BaseInhabitant struct {
+	maxHealth    int
+	currHealth   int
 	maxMove      int
 	percentBeget int
 	percentDie   int
@@ -22,6 +24,7 @@ type BaseInhabitant struct {
 
 // NewBaseInhabitantConf config to NewBaseInhabitant
 type NewBaseInhabitantConf struct {
+	MaxHealth    int
 	MaxMove      int
 	PercentBeget int
 	PercentDie   int
@@ -32,6 +35,8 @@ type NewBaseInhabitantConf struct {
 // NewBaseInhabitant used to create *BaseInhabitant
 func NewBaseInhabitant(c NewBaseInhabitantConf) *BaseInhabitant {
 	return &BaseInhabitant{
+		maxHealth:    c.MaxHealth,
+		currHealth:   c.MaxHealth,
 		maxMove:      c.MaxMove,
 		pxPerson:     c.PxPerson,
 		percentBeget: c.PercentBeget,
@@ -99,6 +104,7 @@ func (i *BaseInhabitant) IsBeget() (bool, utils.MoveVect, InhabitInterface) {
 			PxPerson:     i.pxPerson,
 			PercentBeget: i.percentBeget,
 			PercentDie:   i.percentDie,
+			MaxHealth:    i.maxHealth,
 		})
 	}
 	return false, utils.MoveVect{}, nil
@@ -106,5 +112,17 @@ func (i *BaseInhabitant) IsBeget() (bool, utils.MoveVect, InhabitInterface) {
 
 // IsGoneAway true if Inhabitant is die
 func (i *BaseInhabitant) IsGoneAway() bool {
+	if i.currHealth <= 0 {
+		return true
+	}
+	// return false
 	return rand.Intn(100) <= i.percentDie
+}
+
+func (i *BaseInhabitant) Force() int {
+	return 100
+}
+
+func (i *BaseInhabitant) GotHit(from InhabitInterface) {
+	i.currHealth = i.currHealth - from.Force()
 }
