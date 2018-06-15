@@ -4,8 +4,11 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/Oleg-MBO/blind_deity/basegui"
+	_ "image/jpeg"
+	_ "image/png"
+
 	"github.com/faiface/pixel"
+
 	"github.com/faiface/pixel/pixelgl"
 	// "github.com/llgcode/draw2d/draw2dimg"
 	"golang.org/x/image/colornames"
@@ -34,29 +37,33 @@ func run() {
 	if err != nil {
 		panic(err)
 	}
-	win.Clear(colornames.Black)
+	// win.Clear(colornames.Black)
+	win.Clear(colornames.Brown)
 
 	//  pixel.IM standart matrix
 	IMCenter := pixel.IM.Moved(win.Bounds().Center())
 	fieldSize := 10
-	fieldSize = 20
-	countCreatures := 5
+	fieldSize = 300
+	// countCreatures := 4
 
-	gr := basegui.NewGround(width, height, fieldSize)
-	maxh, maxw := gr.GetLimits()
-	for i := 0; i < countCreatures; i++ {
-		randH := rand.Intn(maxh)
-		randW := rand.Intn(maxw)
+	cre := cr.NewBaseInhabitant(1, fieldSize)
+	creImage := cre.GenImage()
 
-		cre := cr.NewBaseInhabitant(1, fieldSize)
-		gr.SetCreatureOn(randH, randW, cre)
+	indPicCr := pixel.PictureDataFromImage(creImage)
+	spriteCr := pixel.NewSprite(indPicCr, indPicCr.Bounds())
+	// spriteCr.Draw(win, IMCenter)
+	_ = spriteCr
 
-	}
+	cre.Draw(win, IMCenter)
 
-	gr.Draw(win, IMCenter)
+	// im := image.NewRGBA(image.Rect(0, 0, fieldSize, fieldSize))
 
-	// win.Clear(colornames.Forestgreen)
-	ticker := time.NewTicker(500 * time.Millisecond)
+	// utils.Drawcircle(im, fieldSize/2, fieldSize/2, fieldSize/2, color.White)
+	// indPic := pixel.PictureDataFromImage(creImage)
+	// // maxVec := indPic.Bounds().Max
+
+	// sprite := pixel.NewSprite(indPic, indPic.Bounds())
+	// sprite.Draw(win, IMCenter)
 
 	for !win.Closed() {
 		win.Update()
@@ -65,12 +72,6 @@ func run() {
 			return
 		}
 
-		select {
-		case <-ticker.C:
-			gr.Draw(win, IMCenter)
-		default:
-
-		}
 	}
 }
 
