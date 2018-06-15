@@ -3,11 +3,12 @@ package main
 import (
 	"math/rand"
 
+	"github.com/Oleg-MBO/blind_deity/backend"
 	"github.com/faiface/pixel"
 )
 
 type Ground struct {
-	places       []*Place
+	places       []*backend.Place
 	maxCreatures int
 	hPx, wPx     int
 	hLen, wLen   int
