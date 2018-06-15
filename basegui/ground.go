@@ -6,6 +6,7 @@ import (
 	"github.com/faiface/pixel"
 )
 
+// GroundGui represent gui ground
 type GroundGui struct {
 	gamelogic.Ground
 	hPx, wPx int
@@ -14,6 +15,7 @@ type GroundGui struct {
 	sprite  *pixel.Sprite // sprite of image ground
 }
 
+// NewGround create new gui ground
 func NewGround(hPx, wPx, pxField int) *GroundGui {
 	hLen := hPx/pxField - 1
 	wLen := wPx/pxField - 1
@@ -33,6 +35,7 @@ func NewGround(hPx, wPx, pxField int) *GroundGui {
 	return g
 }
 
+// Draw to draw ground
 func (g *GroundGui) Draw(t pixel.Target, matrix pixel.Matrix) {
 	g.sprite.Draw(t, matrix)
 	h, w := g.GetLimits()
