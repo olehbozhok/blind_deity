@@ -54,28 +54,28 @@ func run() {
 		// 	R: uint8(rand.Intn(255)), G: uint8(rand.Intn(255)), B: uint8(rand.Intn(255)), A: 255,
 		// }
 		cre := cr.NewBaseInhabitant(cr.NewBaseInhabitantConf{
-			MaxHealth:    3,
+			MaxHealth:    10,
 			MaxMove:      1,
-			Fource:       2,
-			PercentBeget: 5,
-			PercentDie:   0,
+			Fource:       5,
+			PercentBeget: 2,
+			PercentDie:   1,
 
 			PxPerson: fieldSize,
 			Color:    utils.Green,
 		})
 		gr.SetCreatureOn(randH, randW, cre)
 	}
-
+	countCreatures = 100
 	for i := 0; i < countCreatures; i++ {
 		randH := rand.Intn(maxh)
 		randW := rand.Intn(maxw)
 
 		cre := cr.NewBaseInhabitant(cr.NewBaseInhabitantConf{
-			MaxHealth:    3,
-			MaxMove:      2,
-			Fource:       1,
-			PercentBeget: 5,
-			PercentDie:   0,
+			MaxHealth:    6,
+			MaxMove:      1,
+			Fource:       2,
+			PercentBeget: 2,
+			PercentDie:   1,
 
 			PxPerson: fieldSize,
 			Color:    utils.Blue,
