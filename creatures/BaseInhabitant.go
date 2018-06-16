@@ -11,9 +11,11 @@ import (
 
 // BaseInhabitant represent base Inhabitant type
 type BaseInhabitant struct {
-	maxHealth    int
-	currHealth   int
-	maxMove      int
+	maxHealth  int
+	currHealth int
+	maxMove    int
+	fource     int
+
 	percentBeget int
 	percentDie   int
 
@@ -24,8 +26,10 @@ type BaseInhabitant struct {
 
 // NewBaseInhabitantConf config to NewBaseInhabitant
 type NewBaseInhabitantConf struct {
-	MaxHealth    int
-	MaxMove      int
+	MaxHealth int
+	MaxMove   int
+	Fource    int
+
 	PercentBeget int
 	PercentDie   int
 
@@ -37,6 +41,7 @@ func NewBaseInhabitant(c NewBaseInhabitantConf) *BaseInhabitant {
 	return &BaseInhabitant{
 		maxHealth:    c.MaxHealth,
 		currHealth:   c.MaxHealth,
+		fource:       c.Fource,
 		maxMove:      c.MaxMove,
 		pxPerson:     c.PxPerson,
 		percentBeget: c.PercentBeget,
@@ -102,6 +107,7 @@ func (i *BaseInhabitant) IsBeget() (bool, utils.MoveVect, InhabitInterface) {
 		return true, mV, NewBaseInhabitant(NewBaseInhabitantConf{
 			MaxMove:      i.maxMove,
 			PxPerson:     i.pxPerson,
+			Fource:       i.fource,
 			PercentBeget: i.percentBeget,
 			PercentDie:   i.percentDie,
 			MaxHealth:    i.maxHealth,
@@ -120,7 +126,7 @@ func (i *BaseInhabitant) IsGoneAway() bool {
 }
 
 func (i *BaseInhabitant) Force() int {
-	return 100
+	return i.fource
 }
 
 func (i *BaseInhabitant) GotHit(from InhabitInterface) {

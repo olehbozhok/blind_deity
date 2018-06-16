@@ -14,10 +14,10 @@ import (
 )
 
 const (
-	width      = 700
-	height     = 700
-	seed       = 6502
-	numCircles = 4
+	width  = 700
+	height = 700
+	// seed       = 6502
+	// numCircles = 4
 )
 
 func init() {
@@ -50,26 +50,42 @@ func run() {
 		// randH := maxh
 		// randW := maxw
 
-		cre := cr.NewBaseInhabitant(1, fieldSize)
+		// cre := cr.NewBaseInhabitant(1, fieldSize)
+		cre := cr.NewBaseInhabitant(cr.NewBaseInhabitantConf{
+			MaxHealth:    5,
+			MaxMove:      1,
+			Fource:       1,
+			PercentBeget: 15,
+			PercentDie:   5,
+
+			PxPerson: fieldSize,
+		})
+		// MaxHealth    int
+		// MaxMove      int
+		// PercentBeget int
+		// PercentDie   int
+
+		// PxPerson int
+
 		gr.SetCreatureOn(randH, randW, cre)
 		// maxw--
 	}
 
-	cre := cr.NewBaseInhabitant(1, fieldSize)
-	gr.SetCreatureOn(0, 0, cre)
-	cre = cr.NewBaseInhabitant(1, fieldSize)
-	gr.SetCreatureOn(maxh, maxw, cre)
-	cre = cr.NewBaseInhabitant(1, fieldSize)
-	gr.SetCreatureOn(maxh-1, maxw, cre)
-	cre = cr.NewBaseInhabitant(1, fieldSize)
-	gr.SetCreatureOn(maxh, maxw, cre)
+	// cre := cr.NewBaseInhabitant(1, fieldSize)
+	// gr.SetCreatureOn(0, 0, cre)
+	// cre = cr.NewBaseInhabitant(1, fieldSize)
+	// gr.SetCreatureOn(maxh, maxw, cre)
+	// cre = cr.NewBaseInhabitant(1, fieldSize)
+	// gr.SetCreatureOn(maxh-1, maxw, cre)
+	// cre = cr.NewBaseInhabitant(1, fieldSize)
+	// gr.SetCreatureOn(maxh, maxw, cre)
 
 	gr.Draw(win, IMCenter)
 
 	// win.Clear(colornames.Forestgreen)
-	ticker := time.NewTicker(250 * time.Millisecond)
+	ticker := time.NewTicker(100 * time.Millisecond)
 	go func() {
-		evSecond := time.NewTicker(500 * time.Millisecond)
+		evSecond := time.NewTicker(100 * time.Millisecond)
 		for range evSecond.C {
 			gr.HandleNextStep()
 		}
