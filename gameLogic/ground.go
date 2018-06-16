@@ -77,9 +77,6 @@ func (g *Ground) setCreatureOn(h, w int, inh cr.InhabitInterface) {
 		w = w + maxW + 1
 
 	}
-	// if h < 0 {
-	// 	h = h + maxH
-	// }
 	if h > maxH {
 		h = h - maxH - 1
 	}
@@ -155,9 +152,7 @@ func (g *Ground) HandleNextStep() {
 				toX, toY := cr.NextStep()
 				toH := vh + toY
 				toW := vw + toX
-				// if toH < 0 || toW < 0 || toH > maxH || toW > maxW {
-				// 	continue
-				// }
+
 				if g.getCreatureOn(toH, toW) == nil {
 					g.setCreatureOn(vh, vw, nil)
 					g.setCreatureOn(toH, toW, cr)
