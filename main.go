@@ -42,9 +42,9 @@ func run() {
 
 	fieldSize := 10
 
-	countCreatures := 50
-
 	gr := basegui.NewGround(width, height, fieldSize)
+
+	countCreatures := 20
 	maxh, maxw := gr.GetLimits()
 	for i := 0; i < countCreatures; i++ {
 		randH := rand.Intn(maxh)
@@ -54,28 +54,29 @@ func run() {
 		// 	R: uint8(rand.Intn(255)), G: uint8(rand.Intn(255)), B: uint8(rand.Intn(255)), A: 255,
 		// }
 		cre := cr.NewBaseInhabitant(cr.NewBaseInhabitantConf{
-			MaxHealth:    10,
+			MaxHealth:    66,
 			MaxMove:      1,
-			Fource:       5,
-			PercentBeget: 2,
-			PercentDie:   1,
+			Fource:       3,
+			PercentBeget: 5,
+			PercentDie:   3,
 
 			PxPerson: fieldSize,
 			Color:    utils.Green,
 		})
 		gr.SetCreatureOn(randH, randW, cre)
 	}
-	countCreatures = 100
+
+	// countCreatures = 3
 	for i := 0; i < countCreatures; i++ {
 		randH := rand.Intn(maxh)
 		randW := rand.Intn(maxw)
 
 		cre := cr.NewBaseInhabitant(cr.NewBaseInhabitantConf{
-			MaxHealth:    6,
+			MaxHealth:    100,
 			MaxMove:      1,
 			Fource:       2,
-			PercentBeget: 2,
-			PercentDie:   1,
+			PercentBeget: 5,
+			PercentDie:   3,
 
 			PxPerson: fieldSize,
 			Color:    utils.Blue,
@@ -83,12 +84,29 @@ func run() {
 		gr.SetCreatureOn(randH, randW, cre)
 	}
 
+	// cre := cr.NewBaseInhabitant(cr.NewBaseInhabitantConf{
+	// 	MaxHealth:    50,
+	// 	MaxMove:      1,
+	// 	Fource:       60,
+	// 	PercentBeget: 0,
+	// 	PercentDie:   -1,
+
+	// 	PxPerson: fieldSize,
+	// 	Color:    utils.Green,
+	// })
+	// gr.SetCreatureOn(0, 0, cre)
+	// gr.SetCreatureOn(-1, -0, cre)
+
+	// gr.SetCreatureOn(-0, -0, cre)
+
 	gr.Draw(win, IMCenter)
 
 	// win.Clear(colornames.Forestgreen)
-	ticker := time.NewTicker(100 * time.Millisecond)
+	ticker := time.NewTicker(250 * time.Millisecond)
+
+	evSecond := time.NewTicker(250 * time.Millisecond)
 	go func() {
-		evSecond := time.NewTicker(100 * time.Millisecond)
+
 		for range evSecond.C {
 			gr.HandleNextStep()
 		}
