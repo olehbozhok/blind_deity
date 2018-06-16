@@ -43,8 +43,20 @@ func (g *Ground) IsInhabitExistOn(h, w int) bool {
 // getCreatureOn hidden (without rwmutex.RLock())
 func (g *Ground) getCreatureOn(h, w int) cr.InhabitInterface {
 	maxH, maxW := g.GetLimits()
-	if h < 0 || w < 0 || h > maxH || w > maxW {
-		return nil
+	if h < 0 {
+		h = h + maxH
+	}
+	if w < 0 {
+		w = w + maxW
+	}
+	if h < 0 {
+		h = h + maxH
+	}
+	if h >= maxH {
+		h = h - maxH
+	}
+	if w >= maxW {
+		w = w - maxW
 	}
 	return g.places[h][w]
 }
@@ -56,11 +68,32 @@ func (g *Ground) GetCreatureOn(h, w int) cr.InhabitInterface {
 	return g.places[h][w]
 }
 
+func (g *Ground) setCreatureOn(h, w int, inh cr.InhabitInterface) {
+	maxH, maxW := g.GetLimits()
+	if h < 0 {
+		h = h + maxH + 1
+	}
+	if w < 0 {
+		w = w + maxW + 1
+
+	}
+	// if h < 0 {
+	// 	h = h + maxH
+	// }
+	if h > maxH {
+		h = h - maxH - 1
+	}
+	if w > maxW {
+		w = w - maxW - 1
+	}
+	g.places[h][w] = inh
+}
+
 // SetCreatureOn put creature on h,w
 func (g *Ground) SetCreatureOn(h, w int, inh cr.InhabitInterface) {
 	g.rwmutex.Lock()
 	defer g.rwmutex.Unlock()
-	g.places[h][w] = inh
+	g.setCreatureOn(h, w, inh)
 }
 
 // HandleNextStep handle next step of life inhabittans on the ground
@@ -69,10 +102,36 @@ func (g *Ground) HandleNextStep() {
 	defer g.rwmutex.Unlock()
 
 	maxH, maxW := g.GetLimits()
+
 	for vh := 0; vh <= maxH; vh++ {
 		for vw := 0; vw <= maxW; vw++ {
 			cr := g.places[vh][vw]
 			if cr != nil {
+				if cr1 := g.getCreatureOn(vh+1, vw+1); cr1 != nil {
+					cr1.GotHit(cr)
+				}
+				if cr1 := g.getCreatureOn(vh-1, vw+1); cr1 != nil {
+					cr1.GotHit(cr)
+				}
+				if cr1 := g.getCreatureOn(vh+1, vw-1); cr1 != nil {
+					cr1.GotHit(cr)
+				}
+				if cr1 := g.getCreatureOn(vh-1, vw-1); cr1 != nil {
+					cr1.GotHit(cr)
+				}
+			}
+		}
+	}
+	setMoveInhabbit := make(map[cr.InhabitInterface]bool)
+
+	// MOVE Creature
+	for vh := 0; vh <= maxH; vh++ {
+		for vw := 0; vw <= maxW; vw++ {
+			cr := g.places[vh][vw]
+			if cr != nil {
+				if setMoveInhabbit[cr] {
+					continue
+				}
 				if cr.IsGoneAway() {
 					g.places[vh][vw] = nil
 					continue
@@ -91,28 +150,36 @@ func (g *Ground) HandleNextStep() {
 					cr1.GotHit(cr)
 				}
 
+				setMoveInhabbit[cr] = true
+
 				toX, toY := cr.NextStep()
 				toH := vh + toY
 				toW := vw + toX
-				if toH < 0 || toW < 0 || toH > maxH || toW > maxW {
-					continue
+				// if toH < 0 || toW < 0 || toH > maxH || toW > maxW {
+				// 	continue
+				// }
+				if g.getCreatureOn(toH, toW) == nil {
+					g.setCreatureOn(vh, vw, nil)
+					g.setCreatureOn(toH, toW, cr)
 				}
-				if g.places[toH][toW] != nil {
-					continue
-				}
+			}
+		}
+	}
 
-				g.places[vh][vw] = nil
-				g.places[toH][toW] = cr
-
+	for vh := 0; vh <= maxH; vh++ {
+		for vw := 0; vw <= maxW; vw++ {
+			cr := g.places[vh][vw]
+			if cr != nil {
 				isBeget, m, child := cr.IsBeget()
 				if isBeget {
-					toH = vh + m.H
-					toW = vw + m.W
-					if !(toH < 0 || toW < 0 || toH > maxH || toW > maxW || g.places[toH][toW] != nil) {
-						g.places[toH][toW] = child
+					toH := vh + m.H
+					toW := vw + m.W
+					if g.getCreatureOn(toH, toW) != nil {
+						g.setCreatureOn(toH, toW, child)
 					}
 				}
 			}
 		}
 	}
+
 }
