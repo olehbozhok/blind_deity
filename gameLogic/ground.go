@@ -112,9 +112,7 @@ func (g *Ground) HandleNextStep() {
 						g.places[toH][toW] = child
 					}
 				}
-
 			}
-
 		}
 	}
 }

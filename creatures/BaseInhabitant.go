@@ -20,6 +20,7 @@ type BaseInhabitant struct {
 	percentDie   int
 
 	pxPerson int
+	color    color.Color
 	sprite   *pixel.Sprite
 	bulk     bool
 }
@@ -34,6 +35,7 @@ type NewBaseInhabitantConf struct {
 	PercentDie   int
 
 	PxPerson int
+	Color    color.Color
 }
 
 // NewBaseInhabitant used to create *BaseInhabitant
@@ -46,6 +48,7 @@ func NewBaseInhabitant(c NewBaseInhabitantConf) *BaseInhabitant {
 		pxPerson:     c.PxPerson,
 		percentBeget: c.PercentBeget,
 		percentDie:   c.PercentDie,
+		color:        c.Color,
 		bulk:         true,
 	}
 }
@@ -53,18 +56,6 @@ func NewBaseInhabitant(c NewBaseInhabitantConf) *BaseInhabitant {
 // NextStep return relative next position where Inhabitant want to be
 func (i *BaseInhabitant) NextStep() (x, y int) {
 	return rand.Intn(i.maxMove+i.maxMove+1) - i.maxMove, rand.Intn(i.maxMove+i.maxMove+1) - i.maxMove
-}
-
-// GenImage generate image of the Inhabitant
-func (i *BaseInhabitant) GenImage() *image.RGBA {
-	im := image.NewRGBA(image.Rect(0, 0, i.pxPerson, i.pxPerson))
-
-	// draw.Draw(m, m.Bounds(), &image.Uniform{color.Black}, image.ZP, draw.Src)
-
-	// c := color.RGBA{1, 2, 255, 255}
-	// draw.Draw(im, im.Bounds(), &image.Uniform{c}, image.ZP, draw.Src)
-	utils.Drawcircle(im, i.pxPerson/2, i.pxPerson/2, i.pxPerson/2, color.White)
-	return im
 }
 
 // Bulk set BaseInhabitant is bulk so need create new sprite
@@ -75,6 +66,18 @@ func (i *BaseInhabitant) Bulk() {
 // GetPix show how many pixels take cell
 func (i *BaseInhabitant) GetPix() int {
 	return i.pxPerson
+}
+
+// GenImage generate image of the Inhabitant
+func (i *BaseInhabitant) GenImage() *image.RGBA {
+	im := image.NewRGBA(image.Rect(0, 0, i.pxPerson, i.pxPerson))
+
+	// draw.Draw(m, m.Bounds(), &image.Uniform{color.Black}, image.ZP, draw.Src)
+
+	// c := color.RGBA{1, 2, 255, 255}
+	// draw.Draw(im, im.Bounds(), &image.Uniform{c}, image.ZP, draw.Src)
+	utils.Drawcircle(im, i.pxPerson/2, i.pxPerson/2, i.pxPerson/2, i.color)
+	return im
 }
 
 // Draw used to draw Inhabitant
@@ -111,6 +114,7 @@ func (i *BaseInhabitant) IsBeget() (bool, utils.MoveVect, InhabitInterface) {
 			PercentBeget: i.percentBeget,
 			PercentDie:   i.percentDie,
 			MaxHealth:    i.maxHealth,
+			Color:        i.color,
 		})
 	}
 	return false, utils.MoveVect{}, nil

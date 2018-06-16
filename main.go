@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/Oleg-MBO/blind_deity/basegui"
+	"github.com/Oleg-MBO/blind_deity/utils"
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
 	// "github.com/llgcode/draw2d/draw2dimg"
@@ -38,8 +39,9 @@ func run() {
 
 	//  pixel.IM standart matrix
 	IMCenter := pixel.IM.Moved(win.Bounds().Center())
+
 	fieldSize := 10
-	fieldSize = 10
+
 	countCreatures := 50
 
 	gr := basegui.NewGround(width, height, fieldSize)
@@ -47,38 +49,39 @@ func run() {
 	for i := 0; i < countCreatures; i++ {
 		randH := rand.Intn(maxh)
 		randW := rand.Intn(maxw)
-		// randH := maxh
-		// randW := maxw
 
-		// cre := cr.NewBaseInhabitant(1, fieldSize)
+		// color := color.RGBA{
+		// 	R: uint8(rand.Intn(255)), G: uint8(rand.Intn(255)), B: uint8(rand.Intn(255)), A: 255,
+		// }
 		cre := cr.NewBaseInhabitant(cr.NewBaseInhabitantConf{
-			MaxHealth:    5,
+			MaxHealth:    3,
 			MaxMove:      1,
-			Fource:       1,
-			PercentBeget: 15,
-			PercentDie:   5,
+			Fource:       2,
+			PercentBeget: 5,
+			PercentDie:   0,
 
 			PxPerson: fieldSize,
+			Color:    utils.Green,
 		})
-		// MaxHealth    int
-		// MaxMove      int
-		// PercentBeget int
-		// PercentDie   int
-
-		// PxPerson int
-
 		gr.SetCreatureOn(randH, randW, cre)
-		// maxw--
 	}
 
-	// cre := cr.NewBaseInhabitant(1, fieldSize)
-	// gr.SetCreatureOn(0, 0, cre)
-	// cre = cr.NewBaseInhabitant(1, fieldSize)
-	// gr.SetCreatureOn(maxh, maxw, cre)
-	// cre = cr.NewBaseInhabitant(1, fieldSize)
-	// gr.SetCreatureOn(maxh-1, maxw, cre)
-	// cre = cr.NewBaseInhabitant(1, fieldSize)
-	// gr.SetCreatureOn(maxh, maxw, cre)
+	for i := 0; i < countCreatures; i++ {
+		randH := rand.Intn(maxh)
+		randW := rand.Intn(maxw)
+
+		cre := cr.NewBaseInhabitant(cr.NewBaseInhabitantConf{
+			MaxHealth:    3,
+			MaxMove:      2,
+			Fource:       1,
+			PercentBeget: 5,
+			PercentDie:   0,
+
+			PxPerson: fieldSize,
+			Color:    utils.Blue,
+		})
+		gr.SetCreatureOn(randH, randW, cre)
+	}
 
 	gr.Draw(win, IMCenter)
 
