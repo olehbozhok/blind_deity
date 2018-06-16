@@ -174,7 +174,7 @@ func (g *Ground) HandleNextStep() {
 				if isBeget {
 					toH := vh + m.H
 					toW := vw + m.W
-					if g.getCreatureOn(toH, toW) != nil {
+					if g.getCreatureOn(toH, toW) == nil {
 						g.setCreatureOn(toH, toW, child)
 					}
 				}
