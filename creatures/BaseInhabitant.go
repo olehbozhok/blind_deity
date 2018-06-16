@@ -135,10 +135,10 @@ func (i *BaseInhabitant) Force() int {
 
 func (i *BaseInhabitant) GotHit(from InhabitInterface) {
 	if from1, ok := from.(*BaseInhabitant); ok {
-		if from1.maxMove == i.maxMove ||
-			from1.fource == i.fource ||
-			from1.percentBeget == i.percentBeget ||
-			from1.percentDie == i.percentDie ||
+		if from1.maxMove == i.maxMove &&
+			from1.fource == i.fource &&
+			from1.percentBeget == i.percentBeget &&
+			from1.percentDie == i.percentDie &&
 			from1.maxHealth == i.maxHealth {
 			return
 		}
