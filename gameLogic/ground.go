@@ -100,25 +100,6 @@ func (g *Ground) HandleNextStep() {
 
 	maxH, maxW := g.GetLimits()
 
-	for vh := 0; vh <= maxH; vh++ {
-		for vw := 0; vw <= maxW; vw++ {
-			cr := g.places[vh][vw]
-			if cr != nil {
-				if cr1 := g.getCreatureOn(vh+1, vw+1); cr1 != nil {
-					cr1.GotHit(cr)
-				}
-				if cr1 := g.getCreatureOn(vh-1, vw+1); cr1 != nil {
-					cr1.GotHit(cr)
-				}
-				if cr1 := g.getCreatureOn(vh+1, vw-1); cr1 != nil {
-					cr1.GotHit(cr)
-				}
-				if cr1 := g.getCreatureOn(vh-1, vw-1); cr1 != nil {
-					cr1.GotHit(cr)
-				}
-			}
-		}
-	}
 	setMoveInhabbit := make(map[cr.InhabitInterface]bool)
 
 	// MOVE Creature
@@ -132,19 +113,6 @@ func (g *Ground) HandleNextStep() {
 				if cr.IsGoneAway() {
 					g.places[vh][vw] = nil
 					continue
-				}
-
-				if cr1 := g.getCreatureOn(vh+1, vw+1); cr1 != nil {
-					cr1.GotHit(cr)
-				}
-				if cr1 := g.getCreatureOn(vh-1, vw+1); cr1 != nil {
-					cr1.GotHit(cr)
-				}
-				if cr1 := g.getCreatureOn(vh+1, vw-1); cr1 != nil {
-					cr1.GotHit(cr)
-				}
-				if cr1 := g.getCreatureOn(vh-1, vw-1); cr1 != nil {
-					cr1.GotHit(cr)
 				}
 
 				setMoveInhabbit[cr] = true
@@ -161,10 +129,32 @@ func (g *Ground) HandleNextStep() {
 		}
 	}
 
+	// Make hits
 	for vh := 0; vh <= maxH; vh++ {
 		for vw := 0; vw <= maxW; vw++ {
 			cr := g.places[vh][vw]
 			if cr != nil {
+				if cr1 := g.getCreatureOn(vh+1, vw+1); cr1 != nil {
+					cr1.GotHit(cr.MakeHit(cr))
+				}
+				if cr1 := g.getCreatureOn(vh-1, vw+1); cr1 != nil {
+					cr1.GotHit(cr.MakeHit(cr))
+				}
+				if cr1 := g.getCreatureOn(vh+1, vw-1); cr1 != nil {
+					cr1.GotHit(cr.MakeHit(cr))
+				}
+				if cr1 := g.getCreatureOn(vh-1, vw-1); cr1 != nil {
+					cr1.GotHit(cr.MakeHit(cr))
+				}
+			}
+		}
+	}
+
+	// creatures begets
+	for vh := 0; vh <= maxH; vh++ {
+		for vw := 0; vw <= maxW; vw++ {
+			cr := g.places[vh][vw]
+			if cr != nil && !cr.IsGoneAway() {
 				isBeget, m, child := cr.IsBeget()
 				if isBeget {
 					toH := vh + m.H

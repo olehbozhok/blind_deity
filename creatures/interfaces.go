@@ -12,7 +12,8 @@ type InhabitInterface interface {
 	IsGoneAway() bool
 
 	Force() int
-	GotHit(from InhabitInterface)
+	MakeHit(to InhabitInterface) (damage int)
+	GotHit(damage int)
 
 	GetPix() int
 	GetSprite() *pixel.Sprite

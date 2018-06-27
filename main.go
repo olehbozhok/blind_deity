@@ -11,7 +11,7 @@ import (
 	// "github.com/llgcode/draw2d/draw2dimg"
 	"golang.org/x/image/colornames"
 
-	cr "github.com/Oleg-MBO/blind_deity/creatures"
+	baseInh "github.com/Oleg-MBO/blind_deity/creatures/baseinhabitant"
 )
 
 const (
@@ -45,20 +45,20 @@ func run() {
 	gr := basegui.NewGround(width, height, fieldSize)
 
 	countCreatures := 20
-	maxh, maxw := gr.GetLimits()
+	maxH, maxw := gr.GetLimits()
 	for i := 0; i < countCreatures; i++ {
-		randH := rand.Intn(maxh)
+		randH := rand.Intn(maxH)
 		randW := rand.Intn(maxw)
 
 		// color := color.RGBA{
 		// 	R: uint8(rand.Intn(255)), G: uint8(rand.Intn(255)), B: uint8(rand.Intn(255)), A: 255,
 		// }
-		cre := cr.NewBaseInhabitant(cr.NewBaseInhabitantConf{
-			MaxHealth:    66,
+		cre := baseInh.NewBaseInhabitant(baseInh.NewBaseInhabitantConf{
+			MaxHealth:    3,
 			MaxMove:      1,
 			Fource:       3,
-			PercentBeget: 5,
-			PercentDie:   3,
+			PercentBeget: 6,
+			PercentDie:   4,
 
 			PxPerson: fieldSize,
 			Color:    utils.Green,
@@ -68,15 +68,15 @@ func run() {
 
 	// countCreatures = 3
 	for i := 0; i < countCreatures; i++ {
-		randH := rand.Intn(maxh)
+		randH := rand.Intn(maxH)
 		randW := rand.Intn(maxw)
 
-		cre := cr.NewBaseInhabitant(cr.NewBaseInhabitantConf{
-			MaxHealth:    100,
+		cre := baseInh.NewBaseInhabitant(baseInh.NewBaseInhabitantConf{
+			MaxHealth:    3,
 			MaxMove:      1,
 			Fource:       2,
-			PercentBeget: 5,
-			PercentDie:   3,
+			PercentBeget: 7,
+			PercentDie:   5,
 
 			PxPerson: fieldSize,
 			Color:    utils.Blue,

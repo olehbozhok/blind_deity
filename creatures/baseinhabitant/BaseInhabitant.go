@@ -1,12 +1,13 @@
-package creatures
+package baseinhabitant
 
 import (
-	"image"
 	"image/color"
 	"math/rand"
 
 	"github.com/Oleg-MBO/blind_deity/utils"
 	"github.com/faiface/pixel"
+
+	"github.com/Oleg-MBO/blind_deity/creatures"
 )
 
 // BaseInhabitant represent base Inhabitant type
@@ -58,59 +59,8 @@ func (i *BaseInhabitant) NextStep() (x, y int) {
 	return rand.Intn(i.maxMove+i.maxMove+1) - i.maxMove, rand.Intn(i.maxMove+i.maxMove+1) - i.maxMove
 }
 
-// Bulk set BaseInhabitant is bulk so need create new sprite
-func (i *BaseInhabitant) Bulk() {
-	i.bulk = true
-}
-
-// GetPix show how many pixels take cell
-func (i *BaseInhabitant) GetPix() int {
-	return i.pxPerson
-}
-
-// GenImage generate image of the Inhabitant
-func (i *BaseInhabitant) GenImage() *image.RGBA {
-	im := image.NewRGBA(image.Rect(0, 0, i.pxPerson, i.pxPerson))
-
-	// draw.Draw(m, m.Bounds(), &image.Uniform{color.Black}, image.ZP, draw.Src)
-
-	// c := color.RGBA{1, 2, 255, 255}
-	// draw.Draw(im, im.Bounds(), &image.Uniform{c}, image.ZP, draw.Src)
-	utils.Drawcircle(im, i.pxPerson/2, i.pxPerson/2, i.pxPerson/2, i.color)
-	return im
-}
-
-// GetNewSprite return new sprite of Inhabitant
-func (i *BaseInhabitant) GetNewSprite() *pixel.Sprite {
-	i.bulk = false
-	img := i.GenImage()
-	indPic := pixel.PictureDataFromImage(img)
-	i.sprite = pixel.NewSprite(indPic, indPic.Bounds())
-
-	return i.sprite
-}
-
-// GetSprite return sprite of Inhabitant
-func (i *BaseInhabitant) GetSprite() *pixel.Sprite {
-	if i.bulk {
-		return i.GetNewSprite()
-	}
-	return i.sprite
-}
-
-// Draw used to draw Inhabitant
-func (i *BaseInhabitant) Draw(t pixel.Target, matrix pixel.Matrix) {
-	if i.bulk {
-		i.bulk = false
-		img := i.GenImage()
-		indPic := pixel.PictureDataFromImage(img)
-		i.sprite = pixel.NewSprite(indPic, indPic.Bounds())
-	}
-	i.sprite.Draw(t, matrix)
-}
-
 // IsBeget when Inhabitant is beget return true, where and inhabit
-func (i *BaseInhabitant) IsBeget() (bool, utils.MoveVect, InhabitInterface) {
+func (i *BaseInhabitant) IsBeget() (bool, utils.MoveVect, creatures.InhabitInterface) {
 	if rand.Intn(100) <= i.percentBeget {
 
 		mV := utils.MoveVect{}
@@ -147,19 +97,27 @@ func (i *BaseInhabitant) IsGoneAway() bool {
 	return rand.Intn(100) <= i.percentDie
 }
 
+// Force return damage force of inhabitant
 func (i *BaseInhabitant) Force() int {
 	return i.fource
 }
 
-func (i *BaseInhabitant) GotHit(from InhabitInterface) {
-	if from1, ok := from.(*BaseInhabitant); ok {
+// MakeHit return damage force to hit inhabitant
+func (i *BaseInhabitant) MakeHit(to creatures.InhabitInterface) int {
+	if from1, ok := to.(*BaseInhabitant); ok {
 		if from1.maxMove == i.maxMove &&
 			from1.fource == i.fource &&
 			from1.percentBeget == i.percentBeget &&
 			from1.percentDie == i.percentDie &&
 			from1.maxHealth == i.maxHealth {
-			return
+			return 0
 		}
 	}
-	i.currHealth = i.currHealth - from.Force()
+	return i.Force()
+}
+
+// GotHit calls when inhabitant got hit and
+// currHealth = currHealth - damage
+func (i *BaseInhabitant) GotHit(damage int) {
+	i.currHealth = i.currHealth - damage
 }
