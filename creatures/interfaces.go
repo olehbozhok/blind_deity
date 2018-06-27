@@ -15,5 +15,5 @@ type InhabitInterface interface {
 	GotHit(from InhabitInterface)
 
 	GetPix() int
-	Draw(t pixel.Target, matrix pixel.Matrix)
+	GetSprite() *pixel.Sprite
 }

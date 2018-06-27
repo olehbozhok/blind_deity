@@ -44,10 +44,10 @@ func (g *GroundGui) Draw(t pixel.Target, matrix pixel.Matrix) {
 			cr := g.GetCreatureOn(vh, vw)
 			if cr != nil {
 				crPx := cr.GetPix()
+				sprite := cr.GetSprite()
 				leftBottomMarix := matrix.Moved(pixel.V(float64(-g.wPx/2+crPx/2), float64(-g.hPx/2+crPx/2)))
-				cr.Draw(t, leftBottomMarix.Moved(pixel.V(float64(vw*crPx), float64(vh*crPx))))
+				sprite.Draw(t, leftBottomMarix.Moved(pixel.V(float64(vw*crPx), float64(vh*crPx))))
 			}
-
 		}
 	}
 }

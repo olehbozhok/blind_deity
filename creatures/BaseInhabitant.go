@@ -80,6 +80,24 @@ func (i *BaseInhabitant) GenImage() *image.RGBA {
 	return im
 }
 
+// GetNewSprite return new sprite of Inhabitant
+func (i *BaseInhabitant) GetNewSprite() *pixel.Sprite {
+	i.bulk = false
+	img := i.GenImage()
+	indPic := pixel.PictureDataFromImage(img)
+	i.sprite = pixel.NewSprite(indPic, indPic.Bounds())
+
+	return i.sprite
+}
+
+// GetSprite return sprite of Inhabitant
+func (i *BaseInhabitant) GetSprite() *pixel.Sprite {
+	if i.bulk {
+		return i.GetNewSprite()
+	}
+	return i.sprite
+}
+
 // Draw used to draw Inhabitant
 func (i *BaseInhabitant) Draw(t pixel.Target, matrix pixel.Matrix) {
 	if i.bulk {
