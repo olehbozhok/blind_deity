@@ -5,9 +5,13 @@ import (
 	"github.com/faiface/pixel"
 )
 
+// RelativeWatcher is used for see fields relative to h0,w0
+// I don`t know in withc file put this type and not throw "import cycle not allowed"
+type RelativeWatcher func(h, w int) InhabitInterface
+
 // InhabitInterface interface of Inhabit
 type InhabitInterface interface {
-	NextStep() (x, y int)
+	NextStep(RelativeWatcher) (x, y int)
 	IsBeget() (bool, utils.MoveVect, InhabitInterface)
 	IsGoneAway() bool
 

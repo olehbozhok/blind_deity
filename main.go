@@ -40,11 +40,11 @@ func run() {
 	//  pixel.IM standart matrix
 	IMCenter := pixel.IM.Moved(win.Bounds().Center())
 
-	fieldSize := 10
+	fieldSize := 10 * 2
 
 	gr := basegui.NewGround(width, height, fieldSize)
 
-	countCreatures := 20
+	countCreatures := 50
 	maxH, maxw := gr.GetLimits()
 	for i := 0; i < countCreatures; i++ {
 		randH := rand.Intn(maxH)
@@ -54,11 +54,11 @@ func run() {
 		// 	R: uint8(rand.Intn(255)), G: uint8(rand.Intn(255)), B: uint8(rand.Intn(255)), A: 255,
 		// }
 		cre := baseInh.NewBaseInhabitant(baseInh.NewBaseInhabitantConf{
-			MaxHealth:    3,
+			MaxHealth:    1,
 			MaxMove:      1,
-			Fource:       3,
-			PercentBeget: 6,
-			PercentDie:   4,
+			Fource:       5,
+			PercentBeget: -1,
+			PercentDie:   -1,
 
 			PxPerson: fieldSize,
 			Color:    utils.Green,
@@ -72,11 +72,11 @@ func run() {
 		randW := rand.Intn(maxw)
 
 		cre := baseInh.NewBaseInhabitant(baseInh.NewBaseInhabitantConf{
-			MaxHealth:    3,
+			MaxHealth:    2,
 			MaxMove:      1,
-			Fource:       2,
-			PercentBeget: 7,
-			PercentDie:   5,
+			Fource:       5,
+			PercentBeget: -1,
+			PercentDie:   -1,
 
 			PxPerson: fieldSize,
 			Color:    utils.Blue,
@@ -104,7 +104,7 @@ func run() {
 	// win.Clear(colornames.Forestgreen)
 	ticker := time.NewTicker(250 * time.Millisecond)
 
-	evSecond := time.NewTicker(250 * time.Millisecond)
+	evSecond := time.NewTicker(250 * 2 * time.Millisecond)
 	go func() {
 
 		for range evSecond.C {

@@ -7,7 +7,7 @@ import (
 	"github.com/Oleg-MBO/blind_deity/utils"
 	"github.com/faiface/pixel"
 
-	"github.com/Oleg-MBO/blind_deity/creatures"
+	cr "github.com/Oleg-MBO/blind_deity/creatures"
 )
 
 // BaseInhabitant represent base Inhabitant type
@@ -54,13 +54,8 @@ func NewBaseInhabitant(c NewBaseInhabitantConf) *BaseInhabitant {
 	}
 }
 
-// NextStep return relative next position where Inhabitant want to be
-func (i *BaseInhabitant) NextStep() (x, y int) {
-	return rand.Intn(i.maxMove+i.maxMove+1) - i.maxMove, rand.Intn(i.maxMove+i.maxMove+1) - i.maxMove
-}
-
 // IsBeget when Inhabitant is beget return true, where and inhabit
-func (i *BaseInhabitant) IsBeget() (bool, utils.MoveVect, creatures.InhabitInterface) {
+func (i *BaseInhabitant) IsBeget() (bool, utils.MoveVect, cr.InhabitInterface) {
 	if rand.Intn(100) <= i.percentBeget {
 
 		mV := utils.MoveVect{}
@@ -102,16 +97,28 @@ func (i *BaseInhabitant) Force() int {
 	return i.fource
 }
 
-// MakeHit return damage force to hit inhabitant
-func (i *BaseInhabitant) MakeHit(to creatures.InhabitInterface) int {
-	if from1, ok := to.(*BaseInhabitant); ok {
+// IsEnemy return true if inh is enemy
+func (i *BaseInhabitant) IsEnemy(inh cr.InhabitInterface) bool {
+	if inh == nil {
+		return false
+	}
+
+	if from1, ok := inh.(*BaseInhabitant); ok {
 		if from1.maxMove == i.maxMove &&
 			from1.fource == i.fource &&
 			from1.percentBeget == i.percentBeget &&
 			from1.percentDie == i.percentDie &&
 			from1.maxHealth == i.maxHealth {
-			return 0
+			return false
 		}
+	}
+	return true
+}
+
+// MakeHit return damage force to hit inhabitant
+func (i *BaseInhabitant) MakeHit(to cr.InhabitInterface) int {
+	if !i.IsEnemy(to) {
+		return 0
 	}
 	return i.Force()
 }

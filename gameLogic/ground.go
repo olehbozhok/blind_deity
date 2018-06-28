@@ -61,6 +61,14 @@ func (g *Ground) getCreatureOn(h, w int) cr.InhabitInterface {
 	return g.places[h][w]
 }
 
+// getRelativeWatcher hidden (without rwmutex.RLock())
+// show fields relative to h0, w0
+func (g *Ground) getRelativeWatcher(h0, w0 int) cr.RelativeWatcher {
+	return cr.RelativeWatcher(func(h, w int) cr.InhabitInterface {
+		return g.getCreatureOn(h+h0, w+w0)
+	})
+}
+
 // GetCreatureOn return Inhabit on h, w field or nil
 func (g *Ground) GetCreatureOn(h, w int) cr.InhabitInterface {
 	g.rwmutex.RLock()
@@ -117,7 +125,7 @@ func (g *Ground) HandleNextStep() {
 
 				setMoveInhabbit[cr] = true
 
-				toX, toY := cr.NextStep()
+				toX, toY := cr.NextStep(g.getRelativeWatcher(vh, vw))
 				toH := vh + toY
 				toW := vw + toX
 
@@ -151,16 +159,23 @@ func (g *Ground) HandleNextStep() {
 	}
 
 	// creatures begets
+	setBegetsInhabbit := make(map[cr.InhabitInterface]bool)
+
 	for vh := 0; vh <= maxH; vh++ {
 		for vw := 0; vw <= maxW; vw++ {
 			cr := g.places[vh][vw]
 			if cr != nil && !cr.IsGoneAway() {
+				if setBegetsInhabbit[cr] {
+					continue
+				}
 				isBeget, m, child := cr.IsBeget()
 				if isBeget {
 					toH := vh + m.H
 					toW := vw + m.W
 					if g.getCreatureOn(toH, toW) == nil {
 						g.setCreatureOn(toH, toW, child)
+						setMoveInhabbit[child] = true
+
 					}
 				}
 			}
