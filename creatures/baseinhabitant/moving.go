@@ -7,7 +7,7 @@ import (
 )
 
 // NextStep return relative next position where Inhabitant want to be
-func (i *BaseInhabitant) NextStep(relWatcher cr.RelativeWatcher) (x, y int) {
+func (i *BaseInhabitant) NextStep(relWatcher cr.RelativeWatcher) (int, int) {
 	// iterate over fields to find enemy
 	for rH := 2; rH >= -2; rH-- {
 		for rW := 2; rW >= -2; rW-- {
@@ -33,16 +33,24 @@ func (i *BaseInhabitant) NextStep(relWatcher cr.RelativeWatcher) (x, y int) {
 						return 0, -1
 					}
 				case rH != 0 && rW != 0:
-					switch {
-					case isHPositive && isWPositive && i.IsSafeField(relWatcher, -1, -1):
-						return -1, -1
-					case isHPositive && !isWPositive && i.IsSafeField(relWatcher, -1, 1):
-						return -1, 1
-					case !isHPositive && isWPositive && i.IsSafeField(relWatcher, 1, -1):
-						return 1, -1
-					case !isHPositive && !isWPositive && i.IsSafeField(relWatcher, 1, 1):
-						return 1, 1
+					// fmt.Println(2234)
+					// fmt.Printf("rH = %d && rW = %d\n", rH, rW)
+					var toH, toW int
+					if isHPositive {
+						toH = -1
+					} else {
+						toH = 1
 					}
+					if isWPositive {
+						toW = -1
+					} else {
+						toW = 1
+					}
+
+					// if !i.IsSafeField(relWatcher, toH, toW) {
+					// 	fmt.Printf("i.IsSafeField(relWatcher, %d, %d) == false\n", toH, toW)
+					// }
+					return toH, toW
 				}
 
 			}

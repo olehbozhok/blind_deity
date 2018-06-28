@@ -44,7 +44,7 @@ func run() {
 
 	gr := basegui.NewGround(width, height, fieldSize)
 
-	countCreatures := 50
+	countCreatures := 10
 	maxH, maxw := gr.GetLimits()
 	for i := 0; i < countCreatures; i++ {
 		randH := rand.Intn(maxH)
@@ -56,7 +56,7 @@ func run() {
 		cre := baseInh.NewBaseInhabitant(baseInh.NewBaseInhabitantConf{
 			MaxHealth:    1,
 			MaxMove:      1,
-			Fource:       5,
+			Fource:       100,
 			PercentBeget: -1,
 			PercentDie:   -1,
 
@@ -74,7 +74,7 @@ func run() {
 		cre := baseInh.NewBaseInhabitant(baseInh.NewBaseInhabitantConf{
 			MaxHealth:    2,
 			MaxMove:      1,
-			Fource:       5,
+			Fource:       80,
 			PercentBeget: -1,
 			PercentDie:   -1,
 
@@ -104,7 +104,7 @@ func run() {
 	// win.Clear(colornames.Forestgreen)
 	ticker := time.NewTicker(250 * time.Millisecond)
 
-	evSecond := time.NewTicker(250 * 2 * time.Millisecond)
+	evSecond := time.NewTicker(250 * 4 / 4 * time.Millisecond)
 	go func() {
 
 		for range evSecond.C {
