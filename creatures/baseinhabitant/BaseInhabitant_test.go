@@ -91,7 +91,7 @@ func TestBaseInhabitantNextStep(t *testing.T) {
 		return nil
 	})
 	if !cr1.IsSafeField(relWatcher, 1, 0) {
-		t.Log("i.IsSafeField(relWather, 1, 0) MUST BE FALSE") // <-- PROBLEM THIS
+		t.Log("i.IsSafeField(relWather, 1, 0) MUST BE TRUE") // <-- PROBLEM THIS
 	}
 	t.Logf("i.IsSafeField(relWather, -1, 0):%t \n", cr1.IsSafeField(relWatcher, -1, 0))
 	t.Logf("i.IsSafeField(relWather, 0, 1):%t \n", cr1.IsSafeField(relWatcher, 0, 1))
