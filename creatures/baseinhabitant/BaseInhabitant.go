@@ -126,5 +126,5 @@ func (i *BaseInhabitant) MakeHit(to cr.InhabitInterface) int {
 // GotHit calls when inhabitant got hit and
 // currHealth = currHealth - damage
 func (i *BaseInhabitant) GotHit(damage int) {
-	i.currHealth = i.currHealth - damage
+	i.currHealth -= damage
 }

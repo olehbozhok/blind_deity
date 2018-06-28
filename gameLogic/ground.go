@@ -154,6 +154,9 @@ func (g *Ground) HandleNextStep() {
 				if cr1 := g.getCreatureOn(vh-1, vw-1); cr1 != nil {
 					cr1.GotHit(cr.MakeHit(cr))
 				}
+				if cr.IsGoneAway() {
+					g.setCreatureOn(vh, vw, nil)
+				}
 			}
 		}
 	}
