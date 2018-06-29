@@ -44,19 +44,16 @@ func (g *Ground) IsInhabitExistOn(h, w int) bool {
 func (g *Ground) getCreatureOn(h, w int) cr.InhabitInterface {
 	maxH, maxW := g.GetLimits()
 	if h < 0 {
-		h = h + maxH
+		h = h + maxH + 1
 	}
 	if w < 0 {
-		w = w + maxW
-	}
-	if h < 0 {
-		h = h + maxH
+		w = w + maxW + 1
 	}
 	if h >= maxH {
-		h = h - maxH
+		h = h - maxH + 1
 	}
 	if w >= maxW {
-		w = w - maxW
+		w = w - maxW + 1
 	}
 	return g.places[h][w]
 }
@@ -125,9 +122,9 @@ func (g *Ground) HandleNextStep() {
 
 				setMoveInhabbit[cr] = true
 
-				toX, toY := cr.NextStep(g.getRelativeWatcher(vh, vw))
-				toH := vh + toY
-				toW := vw + toX
+				toRH, toRW := cr.NextStep(g.getRelativeWatcher(vh, vw))
+				toH := vh + toRH
+				toW := vw + toRW
 
 				if g.getCreatureOn(toH, toW) == nil {
 					g.setCreatureOn(vh, vw, nil)
