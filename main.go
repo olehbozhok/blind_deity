@@ -57,7 +57,7 @@ func run() {
 			MaxHealth:    1,
 			MaxMove:      1,
 			Fource:       100,
-			PercentBeget: -1,
+			PercentBeget: 1,
 			PercentDie:   -1,
 
 			PxPerson: fieldSize,
@@ -75,7 +75,7 @@ func run() {
 			MaxHealth:    2,
 			MaxMove:      1,
 			Fource:       80,
-			PercentBeget: -1,
+			PercentBeget: 1,
 			PercentDie:   -1,
 
 			PxPerson: fieldSize,
@@ -104,7 +104,7 @@ func run() {
 	// win.Clear(colornames.Forestgreen)
 	ticker := time.NewTicker(250 * time.Millisecond)
 
-	evSecond := time.NewTicker(250 * 4 / 4 * time.Millisecond)
+	evSecond := time.NewTicker(250 * time.Millisecond)
 	go func() {
 
 		for range evSecond.C {

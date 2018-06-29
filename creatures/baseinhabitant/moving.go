@@ -9,7 +9,6 @@ import (
 // NextStep return relative next position where Inhabitant want to be
 func (i *BaseInhabitant) NextStep(relWatcher cr.RelativeWatcher) (int, int) {
 	i.days++
-	i.SetBulk()
 	// iterate over fields to find enemy
 	for rH := 2; rH >= -2; rH-- {
 		for rW := 2; rW >= -2; rW-- {

@@ -57,6 +57,9 @@ func NewBaseInhabitant(c NewBaseInhabitantConf) *BaseInhabitant {
 
 // IsBeget when Inhabitant is beget return true, where and inhabit
 func (i *BaseInhabitant) IsBeget() (bool, utils.MoveVect, cr.InhabitInterface) {
+	if i.days <= 30 {
+		return false, utils.MoveVect{}, nil
+	}
 	if rand.Intn(100) <= i.percentBeget {
 
 		mV := utils.MoveVect{}
