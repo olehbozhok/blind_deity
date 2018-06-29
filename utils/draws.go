@@ -28,12 +28,13 @@ func GenerateGameField(width, height, fieldSize int) *image.RGBA {
 }
 
 // OilyPoint draw oily point
-func OilyPoint(image *image.RGBA, x, y int, col color.Color) {
-	image.Set(x, y, col)
-	image.Set(x-1, y, col)
-	image.Set(x+1, y, col)
-	image.Set(x, y+1, col)
-	image.Set(x, y-1, col)
+func OilyPoint(image *image.RGBA, x, y, fatnessint int, col color.Color) {
+	for rx := -fatnessint; rx <= fatnessint; rx++ {
+		for ry := -fatnessint; ry <= fatnessint; ry++ {
+			image.Set(x+rx, y+ry, col)
+		}
+	}
+
 }
 
 // Drawcircle is drawing circle
@@ -46,14 +47,16 @@ func Drawcircle(image *image.RGBA, x0, y0, radius int, col color.Color) {
 	derr = dx - (radius << 1)
 
 	for x >= y {
-		image.Set(x0+x, y0+y, col)
-		image.Set(x0+y, y0+x, col)
-		image.Set(x0-y, y0+x, col)
-		image.Set(x0-x, y0+y, col)
-		image.Set(x0-x, y0-y, col)
-		image.Set(x0-y, y0-x, col)
-		image.Set(x0+y, y0-x, col)
-		image.Set(x0+x, y0-y, col)
+		OilyPoint(image, x0+x, y0+y, 0, col)
+		OilyPoint(image, x0+y, y0+x, 0, col)
+		OilyPoint(image, x0-y, y0+x, 0, col)
+
+		OilyPoint(image, x0-x, y0+y, 0, col)
+		OilyPoint(image, x0-x, y0-y, 0, col)
+
+		OilyPoint(image, x0-y, y0-x, 0, col)
+		OilyPoint(image, x0+y, y0-x, 0, col)
+		OilyPoint(image, x0+x, y0-y, 0, col)
 
 		if derr < 0 {
 			y++

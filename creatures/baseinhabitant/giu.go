@@ -7,8 +7,8 @@ import (
 	"github.com/faiface/pixel"
 )
 
-// Bulk set BaseInhabitant is bulk so need create new sprite
-func (i *BaseInhabitant) Bulk() {
+// SetBulk set BaseInhabitant is bulk so need create new sprite
+func (i *BaseInhabitant) SetBulk() {
 	i.bulk = true
 }
 
@@ -25,7 +25,12 @@ func (i *BaseInhabitant) GenImage() *image.RGBA {
 
 	// c := color.RGBA{1, 2, 255, 255}
 	// draw.Draw(im, im.Bounds(), &image.Uniform{c}, image.ZP, draw.Src)
-	utils.Drawcircle(im, i.pxPerson/2, i.pxPerson/2, i.pxPerson/2, i.color)
+	divider := 5 - int(i.days/5)
+	if divider < 2 {
+		divider = 2
+	}
+	radius := i.pxPerson / divider
+	utils.Drawcircle(im, i.pxPerson/2, i.pxPerson/2, radius, i.color)
 	return im
 }
 

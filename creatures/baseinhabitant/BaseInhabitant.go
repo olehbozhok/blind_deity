@@ -16,6 +16,7 @@ type BaseInhabitant struct {
 	currHealth int
 	maxMove    int
 	fource     int
+	days       int
 
 	percentBeget int
 	percentDie   int
