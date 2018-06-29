@@ -1,10 +1,8 @@
 package baseinhabitant
 
 import (
-	"fmt"
 	"testing"
 
-	cr "github.com/Oleg-MBO/blind_deity/creatures"
 	"github.com/Oleg-MBO/blind_deity/utils"
 )
 
@@ -36,11 +34,28 @@ func TestBaseInhabitantIsEnemy(t *testing.T) {
 	}
 }
 
-func TestBaseInhabitantNextStep(t *testing.T) {
+func TestBaseInhabitantIsGoneAway(t *testing.T) {
 	cr1 := NewBaseInhabitant(NewBaseInhabitantConf{
 		MaxHealth:    20,
 		MaxMove:      1,
 		Fource:       1,
+		PercentBeget: 9,
+		PercentDie:   4,
+
+		PxPerson: 10,
+		Color:    utils.Green,
+	})
+	cr1.GotHit(20)
+	if !cr1.IsGoneAway() {
+		t.Error("Creature must be die")
+	}
+}
+
+func TestBaseInhabitantMakeHit(t *testing.T) {
+	cr1 := NewBaseInhabitant(NewBaseInhabitantConf{
+		MaxHealth:    20,
+		MaxMove:      1,
+		Fource:       21,
 		PercentBeget: 9,
 		PercentDie:   4,
 
@@ -59,39 +74,10 @@ func TestBaseInhabitantNextStep(t *testing.T) {
 	})
 	if !cr1.IsEnemy(enemy) {
 		t.Error("cr1 and cr2 is Enemis")
-		t.Fail()
 	}
 
-	for rH := 2; rH >= -2; rH-- {
-		for rW := 2; rW >= -2; rW-- {
-			if rH == 0 && rW == 0 {
-				continue
-			}
-			isRHPositive := rH > 0
-			isRWPositive := rW > 0
-
-			relWatcher := cr.RelativeWatcher(func(h, w int) cr.InhabitInterface {
-				if h == rH && w == rW {
-					return enemy
-				}
-				return nil
-			})
-			nextH, nextW := cr1.NextStep(relWatcher)
-			isHPositive := nextH > 0
-			isWPositive := nextW > 0
-
-			fmt.Printf("enemy on %d, %d; nextH=%d, nextW=%d\n", rH, rW, nextH, nextW)
-
-			if isRHPositive == isHPositive && rH != 0 {
-				t.Errorf("enemy on %d, %d; nextH=%d, nextW=%d isRHPositive must be %t ",
-					rH, rW, nextH, nextW, !isRHPositive)
-			}
-			if isRWPositive == isWPositive && rW != 0 {
-				t.Errorf("enemy on %d, %d; nextH=%d, nextW=%d isWPositive must be %t ",
-					rH, rW, nextH, nextW, !isRWPositive)
-			}
-
-		}
+	damage := cr1.MakeHit(enemy)
+	if damage != 21 {
+		t.Error("damage must be 21")
 	}
-
 }

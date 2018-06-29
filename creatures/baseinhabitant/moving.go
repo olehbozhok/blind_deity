@@ -33,8 +33,6 @@ func (i *BaseInhabitant) NextStep(relWatcher cr.RelativeWatcher) (int, int) {
 				}
 				return nextH, nextW
 
-
-
 			}
 
 		}
