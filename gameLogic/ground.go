@@ -110,25 +110,25 @@ func (g *Ground) HandleNextStep() {
 	// MOVE Creature
 	for vh := 0; vh <= maxH; vh++ {
 		for vw := 0; vw <= maxW; vw++ {
-			cr := g.places[vh][vw]
-			if cr != nil {
-				if setMoveInhabbit[cr] {
+			cr1 := g.places[vh][vw]
+			if cr1 != nil {
+				if setMoveInhabbit[cr1] {
 					continue
 				}
-				if cr.IsGoneAway() {
-					g.places[vh][vw] = nil
+				if cr1.IsGoneAway() {
+					g.setCreatureOn(vh, vw, nil)
 					continue
 				}
 
-				setMoveInhabbit[cr] = true
+				setMoveInhabbit[cr1] = true
 
-				toRH, toRW := cr.NextStep(g.getRelativeWatcher(vh, vw))
+				toRH, toRW := cr1.NextStep(g.getRelativeWatcher(vh, vw))
 				toH := vh + toRH
 				toW := vw + toRW
 
 				if g.getCreatureOn(toH, toW) == nil {
 					g.setCreatureOn(vh, vw, nil)
-					g.setCreatureOn(toH, toW, cr)
+					g.setCreatureOn(toH, toW, cr1)
 				}
 			}
 		}
@@ -137,21 +137,21 @@ func (g *Ground) HandleNextStep() {
 	// Make hits
 	for vh := 0; vh <= maxH; vh++ {
 		for vw := 0; vw <= maxW; vw++ {
-			cr := g.places[vh][vw]
-			if cr != nil {
-				if cr1 := g.getCreatureOn(vh+1, vw+1); cr1 != nil {
-					cr1.GotHit(cr.MakeHit(cr))
+			cr1 := g.places[vh][vw]
+			if cr1 != nil {
+				if cr2 := g.getCreatureOn(vh+1, vw+1); cr2 != nil {
+					cr1.GotHit(cr2.MakeHit(cr1))
 				}
-				if cr1 := g.getCreatureOn(vh-1, vw+1); cr1 != nil {
-					cr1.GotHit(cr.MakeHit(cr))
+				if cr2 := g.getCreatureOn(vh-1, vw+1); cr2 != nil {
+					cr1.GotHit(cr2.MakeHit(cr1))
 				}
-				if cr1 := g.getCreatureOn(vh+1, vw-1); cr1 != nil {
-					cr1.GotHit(cr.MakeHit(cr))
+				if cr2 := g.getCreatureOn(vh+1, vw-1); cr2 != nil {
+					cr1.GotHit(cr2.MakeHit(cr1))
 				}
-				if cr1 := g.getCreatureOn(vh-1, vw-1); cr1 != nil {
-					cr1.GotHit(cr.MakeHit(cr))
+				if cr2 := g.getCreatureOn(vh-1, vw-1); cr2 != nil {
+					cr1.GotHit(cr2.MakeHit(cr1))
 				}
-				if cr.IsGoneAway() {
+				if cr1.IsGoneAway() {
 					g.setCreatureOn(vh, vw, nil)
 				}
 			}
@@ -163,12 +163,12 @@ func (g *Ground) HandleNextStep() {
 
 	for vh := 0; vh <= maxH; vh++ {
 		for vw := 0; vw <= maxW; vw++ {
-			cr := g.places[vh][vw]
-			if cr != nil && !cr.IsGoneAway() {
-				if setBegetsInhabbit[cr] {
+			cr1 := g.places[vh][vw]
+			if cr1 != nil && !cr1.IsGoneAway() {
+				if setBegetsInhabbit[cr1] {
 					continue
 				}
-				isBeget, m, child := cr.IsBeget()
+				isBeget, m, child := cr1.IsBeget()
 				if isBeget {
 					toH := vh + m.H
 					toW := vw + m.W
@@ -181,5 +181,4 @@ func (g *Ground) HandleNextStep() {
 			}
 		}
 	}
-
 }
