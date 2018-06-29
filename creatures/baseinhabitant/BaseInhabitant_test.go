@@ -1,6 +1,7 @@
 package baseinhabitant
 
 import (
+	"fmt"
 	"testing"
 
 	cr "github.com/Oleg-MBO/blind_deity/creatures"
@@ -78,6 +79,8 @@ func TestBaseInhabitantNextStep(t *testing.T) {
 			nextH, nextW := cr1.NextStep(relWatcher)
 			isHPositive := nextH > 0
 			isWPositive := nextW > 0
+
+			fmt.Printf("enemy on %d, %d; nextH=%d, nextW=%d\n", rH, rW, nextH, nextW)
 
 			if isRHPositive == isHPositive && rH != 0 {
 				t.Errorf("enemy on %d, %d; nextH=%d, nextW=%d isRHPositive must be %t ",

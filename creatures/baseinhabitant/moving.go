@@ -18,40 +18,22 @@ func (i *BaseInhabitant) NextStep(relWatcher cr.RelativeWatcher) (int, int) {
 				// found enemy, trying to find safe field
 				isHPositive := rH >= 0
 				isWPositive := rW >= 0
+				var nextH, nextW int
 
-				switch {
-				case rH != 0 && rW == 0:
-					if !isHPositive && i.IsSafeField(relWatcher, 1, 0) {
-						return 1, 0
-					} else if isHPositive && i.IsSafeField(relWatcher, -1, 0) {
-						return -1, 0
-					}
-				case rH == 0 && rW != 0:
-					if !isWPositive && rH == 0 && i.IsSafeField(relWatcher, 0, 1) {
-						return 0, 1
-					} else if isWPositive && rH == 0 && i.IsSafeField(relWatcher, 0, -1) {
-						return 0, -1
-					}
-				case rH != 0 && rW != 0:
-					// fmt.Println(2234)
-					// fmt.Printf("rH = %d && rW = %d\n", rH, rW)
-					var toH, toW int
-					if isHPositive {
-						toH = -1
-					} else {
-						toH = 1
-					}
-					if isWPositive {
-						toW = -1
-					} else {
-						toW = 1
-					}
-
-					// if !i.IsSafeField(relWatcher, toH, toW) {
-					// 	fmt.Printf("i.IsSafeField(relWatcher, %d, %d) == false\n", toH, toW)
-					// }
-					return toH, toW
+				if isHPositive && rH != 0 {
+					nextH = -1
+				} else if !isHPositive && rH != 0 {
+					nextH = 1
 				}
+
+				if isWPositive && rW != 0 {
+					nextW = -1
+				} else if !isWPositive && rW != 0 {
+					nextW = 1
+				}
+				return nextH, nextW
+
+
 
 			}
 

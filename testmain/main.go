@@ -4,23 +4,21 @@ import (
 	"math/rand"
 	"time"
 
-	_ "image/jpeg"
-	_ "image/png"
-
+	"github.com/Oleg-MBO/blind_deity/basegui"
+	"github.com/Oleg-MBO/blind_deity/utils"
 	"github.com/faiface/pixel"
-
 	"github.com/faiface/pixel/pixelgl"
 	// "github.com/llgcode/draw2d/draw2dimg"
 	"golang.org/x/image/colornames"
 
-	cr "github.com/Oleg-MBO/blind_deity/creatures"
+	baseInh "github.com/Oleg-MBO/blind_deity/creatures/baseinhabitant"
 )
 
 const (
-	width      = 700
-	height     = 700
-	seed       = 6502
-	numCircles = 4
+	width  = 700
+	height = 700
+	// seed       = 6502
+	// numCircles = 4
 )
 
 func init() {
@@ -37,33 +35,83 @@ func run() {
 	if err != nil {
 		panic(err)
 	}
-	// win.Clear(colornames.Black)
-	win.Clear(colornames.Brown)
+	win.Clear(colornames.Black)
 
 	//  pixel.IM standart matrix
 	IMCenter := pixel.IM.Moved(win.Bounds().Center())
-	fieldSize := 10
-	fieldSize = 300
-	// countCreatures := 4
 
-	cre := cr.NewBaseInhabitant(1, fieldSize)
-	creImage := cre.GenImage()
+	fieldSize := 10 * 2
 
-	indPicCr := pixel.PictureDataFromImage(creImage)
-	spriteCr := pixel.NewSprite(indPicCr, indPicCr.Bounds())
-	// spriteCr.Draw(win, IMCenter)
-	_ = spriteCr
+	gr := basegui.NewGround(width, height, fieldSize)
 
-	cre.Draw(win, IMCenter)
+	countCreatures := 10
+	maxH, _ := gr.GetLimits()
+	for i := 0; i < countCreatures; i++ {
+		// randH := rand.Intn(maxH)
+		// randW := rand.Intn(maxw)
+		randH, randW := maxH-i, i
 
-	// im := image.NewRGBA(image.Rect(0, 0, fieldSize, fieldSize))
+		// color := color.RGBA{
+		// 	R: uint8(rand.Intn(255)), G: uint8(rand.Intn(255)), B: uint8(rand.Intn(255)), A: 255,
+		// }
+		cre := baseInh.NewBaseInhabitant(baseInh.NewBaseInhabitantConf{
+			MaxHealth:    i,
+			MaxMove:      0,
+			Fource:       100,
+			PercentBeget: -1,
+			PercentDie:   -1,
 
-	// utils.Drawcircle(im, fieldSize/2, fieldSize/2, fieldSize/2, color.White)
-	// indPic := pixel.PictureDataFromImage(creImage)
-	// // maxVec := indPic.Bounds().Max
+			PxPerson: fieldSize,
+			Color:    utils.Green,
+		})
+		gr.SetCreatureOn(randH, randW, cre)
+	}
 
-	// sprite := pixel.NewSprite(indPic, indPic.Bounds())
-	// sprite.Draw(win, IMCenter)
+	// // countCreatures = 3
+	// for i := 0; i < countCreatures; i++ {
+	// 	randH := rand.Intn(maxH)
+	// 	randW := rand.Intn(maxw)
+
+	// 	cre := baseInh.NewBaseInhabitant(baseInh.NewBaseInhabitantConf{
+	// 		MaxHealth:    2,
+	// 		MaxMove:      1,
+	// 		Fource:       80,
+	// 		PercentBeget: -1,
+	// 		PercentDie:   -1,
+
+	// 		PxPerson: fieldSize,
+	// 		Color:    utils.Blue,
+	// 	})
+	// 	gr.SetCreatureOn(randH, randW, cre)
+	// }
+
+	// cre := cr.NewBaseInhabitant(cr.NewBaseInhabitantConf{
+	// 	MaxHealth:    50,
+	// 	MaxMove:      1,
+	// 	Fource:       60,
+	// 	PercentBeget: 0,
+	// 	PercentDie:   -1,
+
+	// 	PxPerson: fieldSize,
+	// 	Color:    utils.Green,
+	// })
+	// gr.SetCreatureOn(0, 0, cre)
+	// gr.SetCreatureOn(-1, -0, cre)
+
+	// gr.SetCreatureOn(-0, -0, cre)
+
+	gr.Draw(win, IMCenter)
+
+	// win.Clear(colornames.Forestgreen)
+	ticker := time.NewTicker(250 * time.Millisecond)
+
+	evSecond := time.NewTicker(250 * 4 / 4 * time.Millisecond)
+	go func() {
+
+		for range evSecond.C {
+			gr.HandleNextStep()
+		}
+	}()
 
 	for !win.Closed() {
 		win.Update()
@@ -72,6 +120,12 @@ func run() {
 			return
 		}
 
+		select {
+		case <-ticker.C:
+			win.Clear(colornames.Black)
+			gr.Draw(win, IMCenter)
+		default:
+		}
 	}
 }
 
