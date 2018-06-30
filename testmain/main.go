@@ -45,11 +45,14 @@ func run() {
 	gr := basegui.NewGround(width, height, fieldSize)
 
 	countCreatures := 10
-	maxH, _ := gr.GetLimits()
-	for i := 0; i < countCreatures; i++ {
+	maxH, maxW := gr.GetLimits()
+	// maxH, _ := gr.GetLimits()
+
+	for i := 1; i < countCreatures; i++ {
 		// randH := rand.Intn(maxH)
 		// randW := rand.Intn(maxw)
-		randH, randW := maxH-i, i
+		randH, randW := maxH-i, maxW-i
+		// randH, randW := maxH-i, i
 
 		// color := color.RGBA{
 		// 	R: uint8(rand.Intn(255)), G: uint8(rand.Intn(255)), B: uint8(rand.Intn(255)), A: 255,

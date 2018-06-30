@@ -32,7 +32,43 @@ func (i *BaseInhabitant) NextStep(relWatcher cr.RelativeWatcher) (int, int) {
 				} else if !isWPositive && rW != 0 {
 					nextW = 1
 				}
-				return nextH, nextW
+
+				if i.IsSafeField(relWatcher, nextH, nextW) {
+					return nextH, nextW
+				}
+				// try find safe place
+
+				if rH == 0 && i.IsSafeField(relWatcher, -1, nextW) {
+					return -1, nextW
+				}
+
+				if rH == 0 && i.IsSafeField(relWatcher, 1, nextW) {
+					return 1, nextW
+				}
+
+				if rW == 0 && i.IsSafeField(relWatcher, nextH, -1) {
+					return nextH, -1
+				}
+
+				if rW == 0 && i.IsSafeField(relWatcher, nextH, 1) {
+					return nextH, 1
+				}
+
+				if isHPositive && i.IsSafeField(relWatcher, nextH, nextW-1) {
+					return nextH, nextW - 1
+				}
+
+				if isHPositive && i.IsSafeField(relWatcher, nextH, nextW+1) {
+					return nextH, nextW + 1
+				}
+
+				if isWPositive && i.IsSafeField(relWatcher, nextH-1, nextW) {
+					return nextH - 1, nextW
+				}
+
+				if isHPositive && i.IsSafeField(relWatcher, nextH+1, nextW) {
+					return nextH + 1, nextW
+				}
 
 			}
 
